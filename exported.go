@@ -157,7 +157,8 @@ func Fatal(args ...interface{}) {
 // If error is non-nil, print error log via Error
 func PrintOnError(err error, args ...interface{}) {
 	if logPanicErr != nil {
-		logPanicErr.LogCaller()
+		// We don't need to log here as CatchPanics will log it
+		return
 	}
 
 	if err != nil {
