@@ -28,11 +28,12 @@ func toCamelCase(input string) string {
 		// Join the words to create the camelCase string
 		joinedWords := strings.Join(words, "")
 
-		return strings.ToLower(joinedWords[0:1]) + joinedWords[1:]
-	} else {
-
-		return ""
+		if len(joinedWords) > 0 {
+			return strings.ToLower(joinedWords[0:1]) + joinedWords[1:]
+		}
 	}
+
+	return ""
 }
 
 // Call to create empty Fields object
@@ -42,7 +43,21 @@ func NewFields_Empty() Fields {
 
 // Call to create Fields from any struct object, using camelCase mapping
 func NewFields(anyObject interface{}) Fields {
+
 	logFields := Fields{}
+
+	// Check if this is a map of string to string
+	map_string_string, ok := anyObject.(map[string]string)
+	if ok {
+		for key, val := range map_string_string {
+			// if key != "" {
+			logFields[toCamelCase(key)] = val
+			// }
+		}
+		return logFields
+	}
+
+	// This is a struct
 	for key, val := range structs_to_map.Map(anyObject) {
 		logFields[toCamelCase(key)] = val
 	}
