@@ -47,12 +47,32 @@ func NewFields(anyObject interface{}) Fields {
 	logFields := Fields{}
 
 	// Check if this is a map of string to string
+	map_string_int, ok := anyObject.(map[string]int)
+	if ok {
+		for key, val := range map_string_int {
+			// if key != "" {
+			logFields[toCamelCase(key)] = val
+			// }
+		}
+		return logFields
+	}
+
+	// Check if this is a map of string to string
 	map_string_string, ok := anyObject.(map[string]string)
 	if ok {
 		for key, val := range map_string_string {
 			// if key != "" {
 			logFields[toCamelCase(key)] = val
 			// }
+		}
+		return logFields
+	}
+
+	// Check if this is a map of string to string
+	map_string_bool, ok := anyObject.(map[string]bool)
+	if ok {
+		for key, val := range map_string_bool {
+			logFields[toCamelCase(key)] = val
 		}
 		return logFields
 	}
